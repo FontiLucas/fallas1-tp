@@ -1,4 +1,3 @@
-
 // Online Javascript Editor for free
 // Write, Edit and Run your Javascript code using JS Online Compiler
 
@@ -216,11 +215,23 @@ class Engine {
         this.modelo = this.CrearArbol()
     }
     
+    var retorno = null;
+    
     this.modelo.hijos.forEach(function(rama) {
-        var fact = rama.fact;
-        var cumple = ComprarFacts(rama.fact, facts)
-        console.log(fact, facts, cumple);
+        var cumple = ComprarFacts(rama.fact, facts);
+        if(cumple) {
+            retorno = rama;
+            rama.hijos.forEach(function(rama1) {
+                var cumple1 = ComprarFacts(rama1.fact, facts);
+                if(cumple1) {
+                    retorno = rama1;
+                    return;
+                }
+            });
+        }
     });
+    
+    return retorno;
   }
   
   CrearArbol(){
@@ -256,6 +267,10 @@ var aux = new Engine();
 crearReglasDeMotos(aux);
 console.log("Cargado");
 const facts = {
-    uso: "Recreativo"
+    uso: "Recreativo",
+    experiencia: "Alta",
+    presupuesto: "Alta",
 };
-aux.run(facts)
+var aux2 = aux.run(facts);
+console.log(aux2.menseaje);
+console.log(aux2.fact);
